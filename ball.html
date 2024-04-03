@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Random Bouncing Balls Animation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100vh;
+        background-color: black;
+      }
+      .ball {
+        border-radius: 50%;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const numBalls = 100;
+      const balls = [];
+
+      function getRandomColor() {
+        const letters = "0123456789ABCDEF";
+        let color = "#";
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
+      for (let i = 0; i < numBalls; i++) {
+        const ball = document.createElement("div");
+        ball.classList.add("ball");
+        const size = gsap.utils.random(5, 20);
+        ball.style.width = size + "px";
+        ball.style.height = size + "px";
+        ball.style.backgroundColor = getRandomColor();
+        document.body.appendChild(ball);
+        balls.push(ball);
+      }
+
+      balls.forEach((ball) => {
+        const tl = gsap.timeline({ repeat: -1, yoyo: true });
+        const randomX = gsap.utils.random(0, window.innerWidth);
+        const randomDuration = gsap.utils.random(0.5, 2, 0.1);
+        const randomDelay = gsap.utils.random(0, 2);
+
+        tl.set(ball, { x: randomX, y: "100vh", yPercent: -100 })
+          .to(ball, { duration: randomDuration, y: "0vh", ease: "power1.out" })
+          .to(ball, {
+            duration: randomDuration,
+            y: "100vh",
+            ease: "power1.in",
+          })
+          .delay(randomDelay);
+      });
+    </script>
+  </body>
+</html>
